@@ -1,0 +1,220 @@
+数据库：
+1.
+CREATE TABLE cqupt_student
+(
+studentid VARCHAR(10),
+name VARCHAR(20),
+sex VARCHAR(2),
+age INTEGER,
+Fee DECIMAL(10,2),
+address VARCHAR(50),
+memo VARCHAR(300));
+
+2.CREATE TABLE ChooseAa
+(Aa1 VARCHAR(20),
+Aa2 INTEGER,
+Aa3 DECIMAL(10));
+
+3.
+CREATE TABLE ChooseBb
+(Bb1 VARCHAR(10),
+Bb2 INTEGER,
+Bb3 DECIMAL(6));
+
+4.
+ALTER TABLE choosebb ADD(Bb4 VARCHAR(20) not null);
+
+5.
+ALTER TABLE choosebb ADD(Bb5 VARCHAR(10));
+
+6.
+CREATE VIEW View_ChooseBb
+AS SELECT *
+FROM ChooseBb
+
+7.DROP VIEW View_chooseBb
+
+8.
+CREATE INDEX Index_bb2 ON choosebb(Bb2)
+CREATE INDEX Index_bb4 ON choosebb(Bb2,’DESC’)
+
+9.
+DROP INDEX Index_bb2
+
+10.
+CREATE TABLE test
+( Name VARCHAR(20),
+Age INTEGER,
+Score NUMERIC(10,2),
+Address VARCHAR(60))
+;
+
+11.
+Insert into test1 (name,age,score,address) values (' 赵一',20,580.00,'兴业苑 2-3-5');
+Insert into test1 (name,age,score,address) values (' 钱二',19,540.00,'南福苑 5-2-9');
+Insert into test1 (name,age,score,address) values (' 孙三',21,555.50,'兴业苑 21-5-15');
+Insert into test1 (name,age,score,address) values (' 李四',22,505.00,'知行苑 8-6-22');
+Insert into test1 (name,age,score,address) values (' 周五',20,495.50,'宁静苑 23-4-8');
+Insert into test1 (name,age,score,address) values (' 吴六',19,435.00,'南福苑 2-5-12');
+
+12.
+CREATE TABLE test_temp
+( Name VARCHAR(20),
+Age INTEGER,
+Score NUMERIC(10,2),
+Address VARCHAR(60));
+
+13.
+Insert into test_temp (name,age,score,address) values (' 郑七',21,490.50,'兴业苑 11-2-1');
+Insert into test_temp (name,age,score,address) values (' 张八',20,560.00,'明理苑 3-3-3');
+Insert into test_temp (name,age,score,address) values (' 王九',19,515.00,'知行苑 19-7-1');
+
+14.
+INSERT INTO test1 
+SELECT *
+FROM
+test_temp;
+
+15.
+UPDATE test1 set Score=Score+5
+WHERE Age<=20;
+
+16.
+UPDATE test1 SET Age=Age-1
+WHERE address LIKE '兴业苑%';
+ 
+17.
+DELETE FROM test1 WHERE
+Age>=21 AND Score>=500;
+
+18.
+DELETE FROM test1 
+WHERE Score<=550 AND address LIKE '南福苑%'
+
+19.
+CREATE TABLE student1
+(SNO VARCHAR(20),
+Name VARCHAR(10),
+Age INTEGER,
+Collage VARCHAR(30));
+
+20.
+CREATE TABLE Course
+(CourseID VARCHAR(15),
+CourseName VARCHAR(30),
+CourseBeforeID VARCHAR(30));
+
+21.
+CREATE TABLE Choose
+(SNO VARCHAR(20),
+CoourseID VARCHAR(30),
+Score DECIMAL(5,2));
+
+22.
+INSERT INTO student1 VALUES('S00001','张三',20,'计算机学院');
+INSERT INTO student1 VALUES('S00002','李四',19,'通信学院');
+INSERT INTO student1 VALUES('S00003','王五',21,'计算机学院');
+
+23.
+INSERT INTO Course VALUES('C1','计算机引论',NULL);
+INSERT INTO Course VALUES('C2','C语言','C1');
+INSERT INTO Course VALUES('C3','数据结构','C2');
+
+24.
+INSERT INTO choose VALUES('S00001','C1',95);
+INSERT INTO choose VALUES('S00001','C2',80);
+INSERT INTO choose VALUES('S00001','C3',84);
+INSERT INTO choose VALUES('S00002','C1',80);
+INSERT INTO choose VALUES('S00002','C2',85);
+INSERT INTO choose VALUES('S00003','C1',78);
+INSERT INTO choose VALUES('S00003','C3',70);
+
+25.
+SELECT SNO,Name
+FROM student1
+WHERE Collage='计算机学院'
+
+26.
+SELECT * 
+FROM student1
+WHERE Age BETWEEN 20 AND 23
+
+27.
+SELECT COUNT(*)
+FROM student1;
+
+28.
+SELECT MAX(Score),MIN(Score),SUM(Score),AVG(Score)
+FROM choose
+WHERE CoourseID='C1';
+
+29.
+SELECT CourseID,CourseName
+FROM course
+WHERE CourseBeforeID is NULL;
+
+30.
+SELECT student1.SNO,Name,course.CourseName,Score
+FROM student1,course,choose
+WHERE choose.CoourseID=course.CourseID AND student1.SNO=choose.SNO;
+
+31.
+SELECT *
+FROM student1 s1
+WHERE EXISTS
+(SELECT *
+FROM student1 s2
+WHERE s2.SNO=s1.SNO AND s2.Collage IN (SELECT Collage
+FROM student1
+WHERE `Name`='张三'))
+
+32.
+SELECT choose.SNO,Score
+FROM choose,student1
+WHERE choose.SNO=student1.SNO AND CoourseID='C1' AND Score<ALL(SELECT
+Score
+FROM
+choose
+WHERE Name='张三');
+
+33.
+SELECT SNO
+FROM choose
+WHERE CoourseID='C1'
+UNION
+SELECT SNO
+FROM choose
+WHERE CoourseID='C3'
+
+34.
+SELECT DISTINCT SNO
+FROM choose
+WHERE CoourseID='C1'
+UNION
+SELECT DISTINCT SNO
+FROM choose
+WHERE CoourseID='C3'
+
+java：
+1.整数反转：
+class Solution {
+    public int reverse(int x) {
+        int ans = 0;
+        while (x != 0) {
+            int pop = x % 10;
+            if (ans > Integer.MAX_VALUE / 10 || (ans == Integer.MAX_VALUE / 10 && pop > 7)) 
+                return 0;
+            if (ans < Integer.MIN_VALUE / 10 || (ans == Integer.MIN_VALUE / 10 && pop < -8)) 
+                return 0;
+            ans = ans * 10 + pop;
+            x /= 10;
+        }
+        return ans;
+    }
+}
+2.爬楼梯：
+public int climb(int n) {
+    if( n == 1 || n == 0 )
+        return 1;
+    return climb(n - 1) + climb(n - 2);
+}
